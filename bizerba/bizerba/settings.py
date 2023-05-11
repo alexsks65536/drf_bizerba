@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'bizerba.apps.BizerbaConfig',
+    'main.apps.MainConfig',
 ]
 
 MIDDLEWARE = [
