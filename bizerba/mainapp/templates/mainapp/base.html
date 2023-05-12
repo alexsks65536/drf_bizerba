@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>BIZERBA Scale Service</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{% static 'mainapp/css/main.css' %}" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+		<div id="wrapper">
+		<!-- Main -->
+			<div id="main">
+				<div class="inner">
+				<!-- Header -->
+				{% include 'mainapp/header.html' %}
+
+				{% block content %}
+				{% endblock content %}
+				</div>
+			</div>
+			{% include 'mainapp/sidebar.html' %}
+		</div>
+		<!-- Scripts -->
+			<script src="{% static 'mainapp/js/jquery.min.js' %}"></script>
+			<script src="{% static 'mainapp/js/browser.min.js' %}"></script>
+			<script src="{% static 'mainapp/js/breakpoints.min.js' %}"></script>
+			<script src="{% static 'mainapp/js/util.js' %}"></script>
+			<script src="{% static 'mainapp/js/main.js' %}"></script>
+
+	</body>
+</html>

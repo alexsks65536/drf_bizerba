@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../Django_S_Balakirev/.idea/Django_S_Balakirev.iml" filepath="$PROJECT_DIR$/../Django_S_Balakirev/.idea/Django_S_Balakirev.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/drf_bizerba.iml" filepath="$PROJECT_DIR$/.idea/drf_bizerba.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../seoproject/.idea/seoproject.iml" filepath="$PROJECT_DIR$/../seoproject/.idea/seoproject.iml" />
+    </modules>
+  </component>
+</project>
