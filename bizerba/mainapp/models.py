@@ -27,8 +27,8 @@ class Department(models.Model):  # таблица отделов
 
 
 class ScaleModel(models.Model):  # таблица моделей весов
-    title = models.CharField(max_length=32, verbose_name='модель весов')
-    brand = models.CharField(max_length=32, default='Bizerba')
+    title = models.CharField(max_length=32, null=True, verbose_name='модель весов')
+    brand = models.CharField(max_length=32, default='Bizerba', null=True)
 
     class Meta:
         verbose_name = 'Модель весов'
@@ -52,9 +52,10 @@ class Scale(models.Model):  # таблица весов
     customer = models.ForeignKey('Customer', on_delete=models.PROTECT, null=True, verbose_name='заказчик')
     department = models.ForeignKey('Department', on_delete=models.PROTECT, null=True, verbose_name='отдел')
     scale_model = models.ForeignKey('ScaleModel', on_delete=models.PROTECT, null=True, verbose_name='модель весов')
-    serial_number = models.CharField(max_length=16, null=True, verbose_name='серийный номер')
-    scale_class = models.CharField(max_length=32, null=True, choices=ScaleClass.choices, verbose_name='класс весов')
-    ip_address = models.GenericIPAddressField(null=True, verbose_name='IP-адрес')
+    serial_number = models.CharField(max_length=16, unique=True, null=True, verbose_name='серийный номер')
+    scale_class = models.CharField(max_length=32, choices=ScaleClass.choices, null=True, verbose_name='класс весов')
+    platform = models.BooleanField(default=False, verbose_name='Платформа')
+    ip_address = models.GenericIPAddressField(default='0.0.0.0', verbose_name='IP-адрес')
     comment = models.CharField(max_length=255, blank=True, verbose_name='примечание')
 
     class Meta:
@@ -63,7 +64,7 @@ class Scale(models.Model):  # таблица весов
         ordering = ['customer', 'department', 'scale_model']
 
     def __str__(self):
-        return self.scale_model
+        return str(f'{self.scale_model}, {self.serial_number}')
 
 
 class ServiceEngineer(models.Model):  # таблица сервисных инженеров
@@ -71,7 +72,7 @@ class ServiceEngineer(models.Model):  # таблица сервисных инж
     time_create = models.DateTimeField(verbose_name='создан', auto_now_add=True)
     time_update = models.DateTimeField(verbose_name='изменен', auto_now=True)
     is_published = models.BooleanField(verbose_name='работает', default=True)
-    to_remove = models.BooleanField(verbose_name='уволить', null=False, default=False)
+    to_remove = models.BooleanField(verbose_name='уволить', default=False)
 
     class Meta:
         verbose_name = 'Инженер'
@@ -86,14 +87,14 @@ class JobApplication(models.Model):  # таблица заявок в работ
     number = models.IntegerField(verbose_name='заявка')
     customer = models.ForeignKey('Customer', on_delete=models.PROTECT, null=True, verbose_name='заказчик')
     scale_model = models.ForeignKey('ScaleModel', on_delete=models.PROTECT, null=True, verbose_name='модель весов')
-    serial_number = models.CharField(max_length=16, null=True, verbose_name='серийный номер')
+    serial_number = models.ForeignKey('Scale',  on_delete=models.PROTECT, null=True, verbose_name='серийный номер')
     engineer = models.ForeignKey('ServiceEngineer', on_delete=models.PROTECT, null=True, verbose_name='сервисный инженер')
     defect = models.TextField(blank=True, verbose_name='неисправность')
     service_work = models.TextField(blank=True, verbose_name='выполненные работы')
     time_create = models.DateTimeField(verbose_name='создан', auto_now_add=True)
     time_update = models.DateTimeField(verbose_name='изменен', auto_now=True)
     is_published = models.BooleanField(verbose_name='опубликован', default=True)
-    to_remove = models.BooleanField(verbose_name='удалить', null=False, default=False)
+    to_remove = models.BooleanField(verbose_name='удалить', default=False)
 
     class Meta:
         verbose_name = 'Заявка'
@@ -101,7 +102,7 @@ class JobApplication(models.Model):  # таблица заявок в работ
         ordering = ['number', 'customer', 'time_create']
 
     def __str__(self):
-        return self.number
+        return str(self.number)
 
 
 class SparePart(models.Model):  # таблица перечень запчастей с артикулами
@@ -109,7 +110,7 @@ class SparePart(models.Model):  # таблица перечень запчаст
     vendor_code = models.CharField(max_length=16, verbose_name='артикул')
     quantity = models.IntegerField(default=0, verbose_name='остаток')
     description = models.CharField(max_length=255, blank=True, verbose_name='описание')
-    scale_id = models.ForeignKey('ScaleModel', on_delete=models.PROTECT, null=True)
+    scale_id = models.ForeignKey('ScaleModel', on_delete=models.PROTECT, null=True, verbose_name='Модель весов')
 
     class Meta:
         verbose_name = 'ЗИП'
@@ -117,20 +118,20 @@ class SparePart(models.Model):  # таблица перечень запчаст
         ordering = ['title', 'scale_id']
 
     def __str__(self):
-        return self.vendor_code
+        return f"{self.vendor_code}, {self.title}"
 
 
 class Receiving(models.Model):  # приход ЗИП
-    act_num = models.ForeignKey('LogReceipt', on_delete=models.PROTECT)
-    vendor_code = models.CharField(max_length=16, verbose_name='артикул')
+    act_num = models.CharField(max_length=16, null=True, verbose_name='Акт прихода')
+    date = models.DateField(null=True, verbose_name='Дата составления')
+    vendor_code = models.ForeignKey('SparePart', on_delete=models.PROTECT, null=True, verbose_name='артикул')
     quantity = models.IntegerField(default=0, verbose_name='приход')
-    price = models.DecimalField(max_digits=8, decimal_places=2)
-    scale_id = models.ForeignKey('ScaleModel', on_delete=models.PROTECT, null=True)
-    description = models.CharField(max_length=255, blank=True, verbose_name='описание')
+    price = models.DecimalField(max_digits=8, decimal_places=2, verbose_name='Цена, EUR')
+    description = models.CharField(max_length=255, default='пополнение', verbose_name='назначение')
     time_create = models.DateTimeField(verbose_name='создан', auto_now_add=True)
     time_update = models.DateTimeField(verbose_name='изменен', auto_now=True)
     is_published = models.BooleanField(verbose_name='опубликован', default=True)
-    to_remove = models.BooleanField(verbose_name='удалить', null=False, default=False)
+    to_remove = models.BooleanField(verbose_name='удалить', default=False)
 
     class Meta:
         verbose_name = 'Поступление ЗИП'
@@ -138,7 +139,7 @@ class Receiving(models.Model):  # приход ЗИП
         ordering = ['act_num', 'time_create']
 
     def __str__(self):
-        return self.act_num
+        return str(self.act_num)
 
 
 class LogReceipt(models.Model):  # журнал прихода ЗИП
@@ -148,7 +149,7 @@ class LogReceipt(models.Model):  # журнал прихода ЗИП
     time_create = models.DateTimeField(verbose_name='создан', auto_now_add=True)
     time_update = models.DateTimeField(verbose_name='изменен', auto_now=True)
     is_published = models.BooleanField(verbose_name='опубликован', default=True)
-    to_remove = models.BooleanField(verbose_name='удалить', null=False, default=False)
+    to_remove = models.BooleanField(verbose_name='удалить', default=False)
 
     class Meta:
         verbose_name = 'Реестр прихода ЗИП'
@@ -160,8 +161,8 @@ class LogReceipt(models.Model):  # журнал прихода ЗИП
 
 
 class Installation(models.Model):  # реестр актов установки/расхода ЗИП по заявкам
-    number_job = models.ForeignKey('JobApplication', on_delete=models.PROTECT, verbose_name='заявка')
-    spare_part = models.ForeignKey('SparePart', on_delete=models.PROTECT, verbose_name='ЗИП')
+    number_job = models.ForeignKey('JobApplication', on_delete=models.PROTECT, null=True, verbose_name='заявка')
+    spare_part = models.ForeignKey('SparePart', on_delete=models.PROTECT, null=True, verbose_name='ЗИП')
     quantity = models.IntegerField(default=0, verbose_name='установлено')
     time_create = models.DateTimeField(verbose_name='создан', auto_now_add=True)
     time_update = models.DateTimeField(verbose_name='изменен', auto_now=True)
@@ -174,4 +175,4 @@ class Installation(models.Model):  # реестр актов установки/
         ordering = ['number_job', 'time_create']
 
     def __str__(self):
-        return self.number_job
+        return str(self.number_job)
