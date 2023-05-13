@@ -18,7 +18,7 @@ class DataMixin:
         jobapplication = JobApplication.objects.filter(is_published=True)  # Заявка в работу
         logreceipt = LogReceipt.objects.filter(is_published=True)  # Журнал прихода ЗИП
         receiving = Receiving.objects.filter(is_published=True) # Приход ЗИП
-        scalemodel = ScaleModel.objects.all()  # Модели весов
+        scale = Scale.objects.all()  # Модели весов
         serviceengineer = ServiceEngineer.objects.filter(is_published=True) # сервисный инженер
         sparepart = SparePart.objects.all()  # ЗИП
 
@@ -28,7 +28,7 @@ class DataMixin:
         context['jobapplication'] = jobapplication
         context['logreceipt'] = logreceipt
         context['receiving'] = receiving
-        context['scalemodel'] = scalemodel
+        context['scale'] = scale
         context['serviceengineer'] = serviceengineer
         context['sparepart'] = sparepart
 

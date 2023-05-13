@@ -1,0 +1,32 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+{% block content %}
+
+        <h2>Заявки</h2>
+
+        <table>
+                <tr>
+                        <td>Заявка</td>
+                        <td>Заказчик</td>
+                        <td>Весы</td>
+                        <td>Номер</td>
+                        <td>Описание</td>
+                        <td>Выполненная работа</td>
+                        <td>Дата</td>
+                </tr>
+                {% for c in jobapplication %}
+                <tr>
+                        <td>{{ c.number }}</td>
+                        <td>{{ c.customer }}</td>
+                        <td>{{ c.scale_model }}</td>
+                        <td>{{ c.serial_number }}</td>
+                        <td>{{ c.defect }}</td>
+                        <td>{{ c.service_work }}</td>
+                        <td>{{ c.time_create }}</td>
+                </tr>
+                {% endfor %}
+        </table>
+
+
+{% endblock content %}

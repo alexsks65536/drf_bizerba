@@ -3,9 +3,16 @@
 
 {% block content %}
 
-        <h2>Заказчики</h2>
-        {% for c in customer %}
-                <p>{{ c.title }}: {{c.address}}</p>
+        <h2>Весовое оборудование</h2>
+        {% for c in scale %}
+        <p>
+                {{c.customer}} |
+                {{c.scale_model}} |
+                {{c.serial_number}} |
+                {{c.scale_class}} |
+                {{c.ip_address}} |
+                {{c.platform}}
+        </p>
         {% endfor %}
 
 {% endblock content %}
