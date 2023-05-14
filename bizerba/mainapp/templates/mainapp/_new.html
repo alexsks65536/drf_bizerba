@@ -3,4 +3,24 @@
 
 {% block content %}
 
+    <table>
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        {% for c in  %}
+        <tr>
+            <td>{{c.}}</td>
+            <td>{{c.}}</td>
+            <td>{{c.}}</td>
+            <td>{{c.}}</td>
+            <td>{{c.}}</td>
+            <td>{{c.}}</td>
+        </tr>
+        {% endfor %}
+    </table>
 {% endblock content %}

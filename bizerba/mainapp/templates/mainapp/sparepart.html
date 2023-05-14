@@ -3,9 +3,23 @@
 
 {% block content %}
 
-        <h2>ЗИП Bizerba</h2>
-        {% for c in customer %}
-                <p>{{ c.title }}: {{c.address}}</p>
+    <h2>ЗИП Bizerba</h2>
+
+    <table>
+        <tr>
+            <th>Название</th>
+            <th>Артикул</th>
+            <th>Количество</th>
+            <th>Использование</th>
+        </tr>
+        {% for c in sparepart %}
+        <tr>
+            <td>{{c.title}}</td>
+            <td>{{c.vendor_code}}</td>
+            <td>{{c.quantity}}</td>
+            <td>{{c.scale_id}}</td>
+        </tr>
         {% endfor %}
+    </table>
 
 {% endblock content %}

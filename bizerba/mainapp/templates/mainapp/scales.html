@@ -4,15 +4,26 @@
 {% block content %}
 
         <h2>Весовое оборудование</h2>
-        {% for c in scale %}
-        <p>
-                {{c.customer}} |
-                {{c.scale_model}} |
-                {{c.serial_number}} |
-                {{c.scale_class}} |
-                {{c.ip_address}} |
-                {{c.platform}}
-        </p>
-        {% endfor %}
+         <table>
+            <tr>
+                <th>Заказчик</th>
+                <th>Модель</th>
+                <th>Серийный номер</th>
+                <th>Класс весов</th>
+                <th>ip адрес</th>
+                <th>Платформа</th>
+            </tr>
+
+            {% for c in scale %}
+               <tr>
+                  <td>{{c.customer}}</td>
+                  <td>{{c.scale_model}}</td>
+                  <td>{{c.serial_number}}</td>
+                  <td>{{c.scale_class}}</td>
+                  <td>{{c.ip_address}}</td>
+                  <td>{{c.platform}}</td>
+               </tr>
+             {% endfor %}
+        </table>
 
 {% endblock content %}
